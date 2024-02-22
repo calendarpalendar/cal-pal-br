@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { LoginContext } from "./LoggedOutWrapper";
-
+import welcomeLogo from "../../img/calpal_logo.png";
 const LoginScreen = () => {
   const { loginState, setLoginState } = useContext(LoginContext);
 
@@ -29,11 +29,21 @@ const LoginScreen = () => {
 
   return (
     <>
-      <form>
-        <input id="usernameField" defaultValue={loginState.input.un} />
-        <input id="passwordField" defaultValue={""} />
-        <button className="btn-lg" onClick={validateInput}>Submit</button>
-        <p className="form-control-feedback">{loginState.feedback}</p>
+      <form id="login-form">
+        <img src={welcomeLogo} />
+        <fieldset>
+          <legend>Please sign in below:</legend>
+          <div className="form-group row">
+            <label htmlFor="usernameField">Username:</label>
+            <input type="text" name="usernameField" id="usernameField" defaultValue={loginState.input.un} />
+          </div>
+          <div className="form-group row">
+            <label htmlFor="passwordField">Password:</label>
+            <input type="password" name="passwordField" id="passwordField" defaultValue={""} />
+          </div>
+          <p className="form-control-feedback">{loginState.feedback}</p>
+          <button className="btn btn-primary btn-lg" onClick={validateInput}>Submit</button>
+        </fieldset>
       </form>
     </>
   );

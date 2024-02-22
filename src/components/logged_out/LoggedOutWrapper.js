@@ -1,3 +1,5 @@
+import '../css/logged_out.css';
+
 import { createContext, useContext, useEffect, useState } from 'react';
 
 import WelcomeScreen from './WelcomeScreen';
