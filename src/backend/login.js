@@ -18,7 +18,8 @@ app.use(cors());
 // Connect to MongoDB:
 
 // Connection string to database: users.
-const uri = "mongodb+srv://b1gd3vd0g:JHBPmttydP5046@cal-pal-cluster.qvdyrdk.mongodb.net/users?retryWrites=true&w=majority";
+// NOTE: replace <username> and <password> with your own to run.
+const uri = "mongodb+srv://<username>:<password>@cal-pal-cluster.qvdyrdk.mongodb.net/users?retryWrites=true&w=majority";
 // Should we connect to the same port with every db? Probably not, but I'm not sure.
 const users_port = 2000;
 
