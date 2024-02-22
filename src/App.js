@@ -2,68 +2,48 @@ import './App.css';
 
 import { useState, createContext } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+// TODO: use these imports to make /welcome, /login, /create_account
 
-import Header from './components/Header';
-import NavBar from './components/NavBar';
-import WeekView from './components/WeekView';
+import LoggedInWrapper from './components/logged_in/LoggedInWrapper';
+import LoggedOutWrapper from './components/logged_out/LoggedOutWrapper';
 
-export const CalendarContext = createContext(null);
 
+/**
+ * A completely global context. Stores user data.
+ * It is null upon startup, and after logging out, 
+ * which results in the Logged_out components being shown.
+ */
+const UserContext = createContext(null);
+
+/**
+ * The wrapper for the whole application. Provider for UserContext, the only
+ * completely global context.
+ */
 function App() {
 
-  // demo data
-  const calCtxValue = { 
-    '1': {
-      name: "Appointments",
-      events: [
-        // event list could be populated with event objects fetched using the event ID list 
-        // contained in the response from the calendar web service
-        {
-          name: "Dentist",
-          date_range: [ '2024-02-20', '2024-02-28' ],
-          time_range: [ '9:00 AM', '11:30 AM' ]
-        },
-        {
-          name: "DMV",
-          date_range: [ '2024-02-21', ],
-          time_range: [ '9:00 AM' , '10:00 AM']
-        }
-      ],
-      visible: true
-    },
-    '2': {
-      name: "Meals",
-      events: [
-        {
-          name: "tacos",
-          date_range: [ '2024-02-20' ],
-          time_range: [ ]
-        }
-      ],
-      visible: true
-    }
+  // Use useState to get a getter and setter for the context.
+  const [userState, setUserState] = useState({
+    loggedIn: false
+  });
+
+  // The initial value of the context, which contains both the userState and setUserState.
+  //    Note: This is the way that I was able to make it work in assignment 3, and I liked it. Let me know what y'all think though. -Devin
+  const initialValue = { userState, setUserState };
+  
+  // The content of the app: either LoggedOutWrapper or LoggedInWrapper.
+  let content;
+  if (!userState.loggedIn) {
+    content = <LoggedOutWrapper />;
+  } else {
+    content = <LoggedInWrapper />;
   }
 
-  const [calendars, setCalendars] = useState(calCtxValue);
-
   return (
-    <>
-      <BrowserRouter>
-        <CalendarContext.Provider value={[calendars, setCalendars]}>
-          <Header/>
-          <div className="container">
-            <Routes>
-              <Route path="/month/" element={<h1>Month</h1>} />
-              <Route path="/" element={<WeekView />} />
-              <Route path="/messages/" element={<h1>Messages</h1>} />
-              <Route path="/settings/" element={<h1>Settings</h1>} />
-            </Routes>
-          </div>
-          <NavBar />
-        </CalendarContext.Provider>
-      </BrowserRouter>
-    </>
+    <UserContext.Provider value={initialValue}>
+      {content}
+    </UserContext.Provider>
   );
 }
 
 export default App;
+export { UserContext };
